@@ -10,6 +10,10 @@ public class Mars {
 	private int width, height;
 
 	private boolean gen = false;
+	Random r = new Random();
+
+	private int smoothingSize = 10;
+	private double smoothingDiv = (smoothingSize*2+1.0)/2.0;
 
 	public void init(int width, int height) {
 		this.width = width;
@@ -59,25 +63,25 @@ public class Mars {
 
 	private int getGray(long seed, int x, int y) {
 		int ret = 0;
-
-		Random r = new Random();
-
 		double d = 0;
 
-		for (int a = 0; a < 3; a++) {
-			for (int b = 0; b < 3; b++) {
-				r.setSeed(seed + x - 1 + a + y - 1 + b);
-				d += r.nextDouble();
+		for (int a = -smoothingSize; a < smoothingSize; a++) {
+			for (int b = -smoothingSize; b < smoothingSize; b++) {
+				d += getGrayHelper(seed, a + x, b + y);
 			}
 		}
 
-		ret = (int) (d * 255.0 / 9);
+		ret = (int) (d * 255.0 / smoothingDiv);
 
 		return ret;
 	}
 
+	private double getGrayHelper(long seed, int x, int y) {
+		r.setSeed(seed * x * y);
+		return r.nextDouble();
+	}
+
 	public void stopGen() {
 		gen = false;
-
 	}
 }
