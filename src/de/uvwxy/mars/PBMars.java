@@ -32,15 +32,15 @@ public class PBMars extends PaintBox {
 		super(context, attrs, defStyle);
 	}
 
-	public void init() {
+	public void init(int seed) {
 		p = Bitmap.createBitmap(size, size, Config.ARGB_8888);
-		m.init(size, size);
+		m.init(seed,size, size);
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		if (!initOnce) {
-			init();
+			init(1337);
 
 			initOnce = true;
 		}
