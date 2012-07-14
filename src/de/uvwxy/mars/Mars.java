@@ -13,10 +13,10 @@ public class Mars {
 	Random r = new Random();
 
 	private double noisyness = 0.2;
-	private int limitHigh = 16;
+	private int limitHigh = 0;
 	private int limitStart = 1;
 	private int limitSteps = 2;
-	private int smoothingSize = 1;
+	private int smoothingSize = 2;
 
 	int seed = 1337;
 
@@ -62,10 +62,7 @@ public class Mars {
 		double d = getGray(seed, x, y) + 0.1;
 
 		for (int l = limitStart; l < limitHigh; l += limitSteps) {
-			int hash  = 1;
-			hash = hash * 17 + x;
-			hash = hash * 31 + y;
-			d *= getGray(seed - 1, hash/l, hash/l);
+			d *= getGray(seed - 1, x/l, y/l);
 		}
 
 		int rnd = ((d) * 255 > 255) ? 255 : (int) ((d) * 255);
@@ -97,16 +94,11 @@ public class Mars {
 	}
 
 	private double getGrayHelper(long seed, int x, int y) {
-		r.setSeed(x);
-		long i = r.nextLong();
-		r.setSeed(y * 542789 + x - y);
-		long j = r.nextLong();
-		r.setSeed(seed * i * j);
-		double ret = r.nextDouble();
-		// r.setSeed(y + seed);
-		r.nextDouble();
-		ret += r.nextDouble();
-		return ret > 1.0 ? .9999 : ret;
+		long hash  = 1;
+		hash = hash * 7 + y;
+		hash = hash * 13 + x;
+		r.setSeed(seed + hash);
+		return r.nextDouble();
 	}
 
 	public void stopGen() {
