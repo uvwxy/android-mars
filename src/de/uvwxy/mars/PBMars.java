@@ -18,7 +18,7 @@ public class PBMars extends PaintBox {
 
 	Mars m = new Mars();
 
-	int size = 256;
+	int size = 128;
 
 	public PBMars(Context context) {
 		super(context);

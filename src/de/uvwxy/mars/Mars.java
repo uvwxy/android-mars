@@ -12,8 +12,8 @@ public class Mars {
 	private boolean gen = false;
 	Random r = new Random();
 
-	private int smoothingSize = 10;
-	private double smoothingDiv = (smoothingSize * 2 + 1.0) / 2.0;
+	private int smoothingSize = 1;
+	private double smoothingDiv = (smoothingSize * 2) * (smoothingSize * 2);
 
 	public void init(int width, int height) {
 		this.width = width;
@@ -77,9 +77,9 @@ public class Mars {
 	}
 
 	private double getGrayHelper(long seed, int x, int y) {
-		r.setSeed(seed + x - seed*y);
+		r.setSeed(seed * (x % 42) - seed * (y % 21) + x - 42 * y);
 		double ret = r.nextDouble();
-		//r.setSeed(y + seed);
+		// r.setSeed(y + seed);
 		r.nextDouble();
 		ret += r.nextDouble();
 		return ret > 1.0 ? ret - 1.0 : ret;
