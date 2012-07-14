@@ -17,7 +17,9 @@ public class PBMars extends PaintBox {
 	private Paint paint = new Paint();
 
 	Mars m = new Mars();
-	
+
+	int size = 256;
+
 	public PBMars(Context context) {
 		super(context);
 	}
@@ -31,8 +33,8 @@ public class PBMars extends PaintBox {
 	}
 
 	public void init() {
-		p = Bitmap.createBitmap(getWidth(), getHeight(), Config.ARGB_8888);
-		m.init(getWidth(), getHeight());
+		p = Bitmap.createBitmap(size, size, Config.ARGB_8888);
+		m.init(size, size);
 	}
 
 	@Override
@@ -42,7 +44,13 @@ public class PBMars extends PaintBox {
 
 			initOnce = true;
 		}
-		p.setPixels(m.getData(), 0, getWidth(), 0, 0, getWidth(), getHeight());
+		float sx = getWidth() / size;
+		float sy = getHeight() / size;
+
+		float sz = sx < sy ? sx : sy;
+
+		matrix.setScale(sz, sz);
+		p.setPixels(m.getData(), 0, size, 0, 0, size, size);
 		canvas.drawBitmap(p, matrix, paint);
 
 	}

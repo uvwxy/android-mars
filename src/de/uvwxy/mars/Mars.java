@@ -13,7 +13,7 @@ public class Mars {
 	Random r = new Random();
 
 	private int smoothingSize = 10;
-	private double smoothingDiv = (smoothingSize*2+1.0)/2.0;
+	private double smoothingDiv = (smoothingSize * 2 + 1.0) / 2.0;
 
 	public void init(int width, int height) {
 		this.width = width;
@@ -45,7 +45,7 @@ public class Mars {
 	private void noise() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				data[x + y * width] = randomGray(x, y);
+				data[x + y * width] = randomGray(x - width / 2, y - height / 2);
 				if (!gen)
 					return;
 			}
@@ -77,8 +77,12 @@ public class Mars {
 	}
 
 	private double getGrayHelper(long seed, int x, int y) {
-		r.setSeed(seed * x * y);
-		return r.nextDouble();
+		r.setSeed(seed + x - seed*y);
+		double ret = r.nextDouble();
+		//r.setSeed(y + seed);
+		r.nextDouble();
+		ret += r.nextDouble();
+		return ret > 1.0 ? ret - 1.0 : ret;
 	}
 
 	public void stopGen() {
