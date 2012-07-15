@@ -26,4 +26,12 @@ public class MarsChunkID {
 
 		return (((MarsChunkID) o).getX() == x) && (((MarsChunkID) o).getY() == y);
 	}
+
+	@Override
+	public int hashCode() {
+		int hash = 1;
+		hash = hash * 17 + x;
+		hash = hash * 31 + y;
+		return hash;
+	}
 }

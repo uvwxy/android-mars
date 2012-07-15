@@ -49,7 +49,9 @@ public class PBMars extends PaintBox {
 		gen = new MarsGenerator(42);
 		mars = new Mars(gen, 8);
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
-		renderer = new MarsRenderer(context, R.drawable.mc_fixed, 228);
+		// renderer = new MarsRenderer(context, R.drawable.mc_fixed, 228);
+		renderer = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30);
+
 		camera = new MarsCamera(0, 0, 2, 0);
 		// TODO: regain some texture here:
 	}
@@ -75,7 +77,8 @@ public class PBMars extends PaintBox {
 				handleFingers(event);
 				break;
 			case PAN:
-
+				camera.moveXBy((int) panZoomResult.x);
+				camera.moveYBy((int) panZoomResult.y);
 				break;
 			case ZOOM:
 				if (panZoomResult.scale < 1) {

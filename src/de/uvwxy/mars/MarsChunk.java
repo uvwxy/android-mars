@@ -31,9 +31,15 @@ public class MarsChunk implements Serializable {
 			}
 		}
 	}
-	
+
 	public MarsChunkID getId() {
 		return id;
+	}
+
+	public int getHeight(int x, int y) {
+		if (heightmap != null)
+			return heightmap[x][y];
+		return -1;
 	}
 
 	public int getX() {

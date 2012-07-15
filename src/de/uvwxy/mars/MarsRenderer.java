@@ -42,6 +42,8 @@ public class MarsRenderer {
 		black.setStyle(Style.FILL);
 	}
 
+	int radius = 5;
+	
 	public void render(Canvas canvas, Mars mars, MarsCamera camera) {
 		canvas_width = canvas.getWidth();
 		canvas_height = canvas.getHeight();
@@ -57,24 +59,33 @@ public class MarsRenderer {
 		scaled_cube_img_diag_pixels = (int) (s * cube_diag_pixels);
 
 		canvas.drawRect(0, 0, canvas_width, canvas_height, black);
+		
+		for (int x = radius; x >= -radius; x--) {
+			for (int y = radius; y >= -radius; y--) {
+				drawChunk(
+						mars.getChunk(new MarsChunkID(x + camera.getX() / Mars.CHUNK_N, y + camera.getY()
+								/ Mars.CHUNK_N)), canvas, camera, mars);
+			}
+		}
 
-		// renderCube(canvas, 0, 0, 0, camera);
-		renderOneSquare(canvas, mars, camera);
+		renderCube(canvas, 0, 0, 0, camera, mars);
+		// renderOneSquare(canvas, mars, camera);
 	}
 
 	public void renderOneSquare(Canvas canvas, Mars mars, MarsCamera camera) {
-		renderCube(canvas, 0, 1, -1, camera);
-		renderCube(canvas, 1, 0, -1, camera);
-		renderCube(canvas, -1, 1, -1, camera);
-		renderCube(canvas, 1, -1, -1, camera);
-		renderCube(canvas, -1, 0, -1, camera);
-		renderCube(canvas, 0, -1, -1, camera);
-		renderCube(canvas, -1, -1, -1, camera);
+		renderCube(canvas, 0, 1, -1, camera, mars);
+		renderCube(canvas, 1, 0, -1, camera, mars);
+		renderCube(canvas, -1, 1, -1, camera, mars);
+		renderCube(canvas, 1, -1, -1, camera, mars);
+		renderCube(canvas, -1, 0, -1, camera, mars);
+		renderCube(canvas, 0, -1, -1, camera, mars);
+		renderCube(canvas, -1, -1, -1, camera, mars);
 
-		renderCube(canvas, 0, 0, 0, camera);
+		renderCube(canvas, 0, 0, 0, camera, mars);
 	}
 
-	private void renderCube(Canvas canvas, int x, int y, int z, MarsCamera camera) {
+	private void renderCube(Canvas canvas, int x, int y, int z, MarsCamera camera, Mars mars) {
+		z -= mars.getHeight(camera.getX(), camera.getY());
 		Matrix m = new Matrix(matrix_camera);
 		setMatrixTo(x, y, z, camera);
 		m.postConcat(matrix);
@@ -82,11 +93,10 @@ public class MarsRenderer {
 	}
 
 	private void setMatrixTo(int x, int y, int z, MarsCamera camera) {
-
 		z *= -1;
 		int x_t = canvas_center_x - scaled_cube_img_width + scaled_cube_img_width / 2 * (x - y);
-		int y_t = canvas_center_y - scaled_cube_img_height + (scaled_cube_img_height - scaled_cube_img_diag_pixels)
-				* z - (scaled_cube_img_diag_pixels / 2) * (x + y);
+		int y_t = canvas_center_y - scaled_cube_img_height + (scaled_cube_img_height - scaled_cube_img_diag_pixels) * z
+				- (scaled_cube_img_diag_pixels / 2) * (x + y);
 
 		matrix.setTranslate(x_t, y_t);
 	}
@@ -95,7 +105,12 @@ public class MarsRenderer {
 		// TODO
 	}
 
-	private void drawChunk() {
-
+	private void drawChunk(MarsChunk c, Canvas canvas, MarsCamera camera, Mars mars) {
+		for (int x = c.getN() - 1; x >= 0; x--) {
+			for (int y = c.getN() - 1; y >= 0; y--) {
+				renderCube(canvas, x + c.getN() * c.getX() - camera.getX(), y + c.getN() * c.getY() - camera.getY(),
+						c.getHeight(x, y), camera, mars);
+			}
+		}
 	}
 }
