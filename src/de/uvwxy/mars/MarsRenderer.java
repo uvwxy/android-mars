@@ -16,6 +16,11 @@ public class MarsRenderer {
 	private int cube_img_height;
 	private int cube_diag_pixels;
 
+	private int canvas_width;
+	private int canvas_height;
+	private int canvas_center_x;
+	private int canvas_center_y;
+
 	private Matrix matrix = new Matrix();
 	private Paint paint = new Paint();
 
@@ -27,14 +32,35 @@ public class MarsRenderer {
 	}
 
 	public void render(Canvas canvas, Mars mars, MarsCamera camera) {
-		renderOneSquare(canvas,mars,camera);
+		canvas_width = canvas.getWidth();
+		canvas_height = canvas.getHeight();
+		canvas_center_x = canvas_width / 2;
+		canvas_center_y = canvas_height / 2;
+
+		renderOneSquare(canvas, mars, camera);
 	}
 
 	public void renderOneSquare(Canvas canvas, Mars mars, MarsCamera camera) {
-		// matrix.setTranslate(canvas.getWidth()/2, canvas.getHeight()/2);
+		setMatrixTo(1, 1, 0);
+		canvas.drawBitmap(base_image, matrix, paint);
+		setMatrixTo(0, 0, 0);
+		canvas.drawBitmap(base_image, matrix, paint);
+		setMatrixTo(-1,-1, 0);
+		canvas.drawBitmap(base_image, matrix, paint);
+		setMatrixTo(1,-1, 0);
+		canvas.drawBitmap(base_image, matrix, paint);
+		setMatrixTo(-1,1, 0);
 		canvas.drawBitmap(base_image, matrix, paint);
 		paint.setColor(Color.WHITE);
-		
+
 		canvas.drawText("TEST", 20, 20, paint);
+	}
+
+	private void setMatrixTo(int x, int y, int z) {
+		z*=-1;
+		int x_t = canvas_center_x - cube_img_width / 2 + cube_img_width / 2 * (x-y);
+		int y_t = canvas_center_y - cube_img_height / 2 + (cube_img_height-cube_diag_pixels) * z - (cube_diag_pixels/2) * (x+y);
+
+		matrix.setTranslate(x_t, y_t);
 	}
 }
