@@ -6,8 +6,17 @@ import android.graphics.Color;
 import android.util.Log;
 
 public class Mars {
+	private double NOISE_SCALE_MOUNTAINS = 32.0d;
+	private double NOISE_HILLS_BELOW = 0.6;
+	private double NOISE_SCALE_HILLS = 16.0d;
+	private double NOISE_SCALE_HILLS_SIZE = 1.0d / 12.0d;
+	private double NOISE_GRAVEL_BELOW = 0.4;
+	private double NOISE_SCALE_GRAVEL = 2.0d;
+	private double NOISE_SCALE_GRAVEL_SIZE = 1.0d / 64.0d;
 	private int[] data;
 	private int width, height;
+
+	private int[] color_mars_one = { 163, 111, 72 };
 
 	private boolean gen = false;
 	Random r = new Random();
@@ -24,7 +33,7 @@ public class Mars {
 		this.seed = seed;
 		this.width = width;
 		this.height = height;
-
+		// this.WORLD_SIZE = width;
 		data = new int[width * height];
 
 		gen = true;
@@ -51,7 +60,7 @@ public class Mars {
 	private void noise(int seed) {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				data[x + y * width] = randomGray(seed, x - width / 2, y - height / 2);
+				data[x + y * width] = randomGray(seed, x, y);
 				if (!gen)
 					return;
 			}
@@ -59,46 +68,16 @@ public class Mars {
 	}
 
 	private int randomGray(int seed, int x, int y) {
-		double d = getGray(seed, x, y) + 0.1;
 
-		for (int l = limitStart; l < limitHigh; l += limitSteps) {
-			d *= getGray(seed - 1, x/l, y/l);
-		}
-
-		int rnd = ((d) * 255 > 255) ? 255 : (int) ((d) * 255);
-
-		return Color.argb(255, rnd, rnd, rnd);
-	}
-
-	private int rnd255() {
-		return (int) (Math.random() * 255);
-	}
-
-	private double getGray(long seed, int x, int y) {
-		double ret = 0;
-		double d = 0;
-		double num = 0;
-		for (int a = -smoothingSize; a < smoothingSize; a++) {
-			for (int b = -smoothingSize; b < smoothingSize; b++) {
-				d += getGrayHelper(seed, a + x, b + y);
-				num++;
-			}
-		}
-		ret = d / num;
-
-		return ret;
-	}
-
-	private double fix(double f, double fix) {
-		return f > fix ? f : fix;
-	}
-
-	private double getGrayHelper(long seed, int x, int y) {
-		long hash  = 1;
-		hash = hash * 7 + y;
-		hash = hash * 13 + x;
-		r.setSeed(seed + hash);
-		return r.nextDouble();
+		double d = (ImprovedPerlin.noise(x / NOISE_SCALE_MOUNTAINS, y / NOISE_SCALE_MOUNTAINS, seed
+				/ NOISE_SCALE_MOUNTAINS) + 1.0) / 2.0;
+		d += (ImprovedPerlin.noise(x / NOISE_SCALE_HILLS, y / NOISE_SCALE_HILLS, seed / NOISE_SCALE_MOUNTAINS))
+				* NOISE_SCALE_HILLS_SIZE;
+		if (NOISE_GRAVEL_BELOW >= d)
+			d += (ImprovedPerlin.noise(x / NOISE_SCALE_GRAVEL, y / NOISE_SCALE_GRAVEL, seed / NOISE_SCALE_MOUNTAINS))
+					* NOISE_SCALE_GRAVEL_SIZE;
+		return Color.argb(255, (int) (d * color_mars_one[0]), (int) (d * color_mars_one[1]),
+				(int) (d * color_mars_one[2]));
 	}
 
 	public void stopGen() {
