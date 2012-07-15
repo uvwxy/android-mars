@@ -25,7 +25,7 @@ public class MarsRenderer {
 	private Paint paint = new Paint();
 
 	public MarsRenderer(Context context, int res_id, int cube_diag_pixels) {
-		base_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.mars_block_fixed);
+		base_image = BitmapFactory.decodeResource(context.getResources(), res_id);
 		cube_img_width = base_image.getWidth();
 		cube_img_height = base_image.getHeight();
 		this.cube_diag_pixels = cube_diag_pixels;
@@ -41,19 +41,23 @@ public class MarsRenderer {
 	}
 
 	public void renderOneSquare(Canvas canvas, Mars mars, MarsCamera camera) {
-		setMatrixTo(1, 1, 0);
-		canvas.drawBitmap(base_image, matrix, paint);
-		setMatrixTo(0, 0, 0);
-		canvas.drawBitmap(base_image, matrix, paint);
-		setMatrixTo(-1,-1, 0);
-		canvas.drawBitmap(base_image, matrix, paint);
-		setMatrixTo(1,-1, 0);
-		canvas.drawBitmap(base_image, matrix, paint);
-		setMatrixTo(-1,1, 0);
-		canvas.drawBitmap(base_image, matrix, paint);
+		renderCube(canvas, 0, 1, -1);
+		renderCube(canvas, 1, 0, -1);
+		renderCube(canvas, -1, 1, -1);
+		renderCube(canvas, 1, -1, -1);
+		renderCube(canvas, -1, 0, -1);
+		renderCube(canvas, 0, -1, -1);
+		renderCube(canvas, -1, -1, -1);
+		
+		renderCube(canvas, 0, 0, 0);
 		paint.setColor(Color.WHITE);
 
 		canvas.drawText("TEST", 20, 20, paint);
+	}
+	
+	private void renderCube(Canvas canvas, int x, int y, int z){
+		setMatrixTo(x, y, z);
+		canvas.drawBitmap(base_image, matrix, paint);
 	}
 
 	private void setMatrixTo(int x, int y, int z) {

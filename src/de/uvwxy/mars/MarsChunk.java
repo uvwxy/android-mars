@@ -31,7 +31,7 @@ public class MarsChunk implements Serializable {
 			}
 		}
 	}
-
+	
 	public MarsChunkID getId() {
 		return id;
 	}
