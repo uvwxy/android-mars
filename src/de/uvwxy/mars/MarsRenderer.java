@@ -84,8 +84,8 @@ public class MarsRenderer {
 	private void setMatrixTo(int x, int y, int z, MarsCamera camera) {
 
 		z *= -1;
-		int x_t = canvas_center_x - scaled_cube_img_width / 2 + scaled_cube_img_width / 2 * (x - y);
-		int y_t = canvas_center_y - scaled_cube_img_height / 2 + (scaled_cube_img_height - scaled_cube_img_diag_pixels)
+		int x_t = canvas_center_x - scaled_cube_img_width + scaled_cube_img_width / 2 * (x - y);
+		int y_t = canvas_center_y - scaled_cube_img_height + (scaled_cube_img_height - scaled_cube_img_diag_pixels)
 				* z - (scaled_cube_img_diag_pixels / 2) * (x + y);
 
 		matrix.setTranslate(x_t, y_t);
