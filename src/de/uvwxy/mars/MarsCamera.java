@@ -2,6 +2,7 @@ package de.uvwxy.mars;
 
 public class MarsCamera {
 	private static final int MINIMUM_HEIGHT = 2;
+	private static final int MAXIMUM_HEIGHT = 256;
 
 	int x, y, z;
 

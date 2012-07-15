@@ -50,7 +50,7 @@ public class PBMars extends PaintBox {
 		mars = new Mars(gen, 8);
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
 		renderer = new MarsRenderer(context, R.drawable.mc_fixed,228);
-		camera = new MarsCamera(0, 0, 64, 0);
+		camera = new MarsCamera(0, 0, 2, 0);
 		// TODO: regain some texture here:
 	}
 
@@ -78,10 +78,12 @@ public class PBMars extends PaintBox {
 
 				break;
 			case ZOOM:
-				if (panZoomResult.scale>0){
+				if (panZoomResult.scale>1){
 					camera.up();
+					Log.i("MARS", "CAMERA UP");
 				} else {
 					camera.down();
+					Log.i("MARS", "CAMERA DOWN");
 				}
 				break;
 			}
