@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
@@ -17,21 +18,23 @@ public class MarsRenderer {
 
 	private Matrix matrix = new Matrix();
 	private Paint paint = new Paint();
-	
+
 	public MarsRenderer(Context context, int res_id, int cube_diag_pixels) {
 		base_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.mars_block_fixed);
 		cube_img_width = base_image.getWidth();
 		cube_img_height = base_image.getHeight();
 		this.cube_diag_pixels = cube_diag_pixels;
 	}
-	
-	
-	public void render(Canvas canvas, Mars mars, MarsCamera camera){
-		
+
+	public void render(Canvas canvas, Mars mars, MarsCamera camera) {
+		renderOneSquare(canvas,mars,camera);
 	}
-	
-	public void renderOneSquare(Canvas canvas, Mars mars, MarsCamera camera){
-		matrix.setTranslate(canvas.getWidth()/2, canvas.getHeight()/2);
+
+	public void renderOneSquare(Canvas canvas, Mars mars, MarsCamera camera) {
+		// matrix.setTranslate(canvas.getWidth()/2, canvas.getHeight()/2);
 		canvas.drawBitmap(base_image, matrix, paint);
+		paint.setColor(Color.WHITE);
+		
+		canvas.drawText("TEST", 20, 20, paint);
 	}
 }
