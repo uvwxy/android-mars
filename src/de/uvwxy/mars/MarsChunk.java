@@ -2,11 +2,16 @@ package de.uvwxy.mars;
 
 import java.io.Serializable;
 
+import android.graphics.Bitmap;
+
 public class MarsChunk implements Serializable {
 	private static final long serialVersionUID = 3530480190643342044L;
 
 	private final int n;
 	private final MarsChunkID id;
+
+	private Bitmap screen_data;
+	private double screen_data_scale_value;
 
 	private int[][] heightmap;
 	private int[][] object_data;
@@ -30,6 +35,22 @@ public class MarsChunk implements Serializable {
 				heightmap[x][y] = gen.getHeight(x + n * id.getX(), y + n * id.getY());
 			}
 		}
+	}
+
+	public Bitmap getScreen_data() {
+		return screen_data;
+	}
+
+	public void setScreen_data(Bitmap screen_data) {
+		this.screen_data = screen_data;
+	}
+
+	public double getScreen_data_scale_value() {
+		return screen_data_scale_value;
+	}
+
+	public void setScreen_data_scale_value(double screen_data_scale_value) {
+		this.screen_data_scale_value = screen_data_scale_value;
 	}
 
 	public MarsChunkID getId() {

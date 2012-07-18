@@ -5,7 +5,7 @@ import android.util.Log;
 
 public class MarsGenerator {
 
-	private final int MAP_HEIGHT = 64;
+	public final int MAP_HEIGHT = 64;
 	private final int MAP_N = 67108864; // bit more than a year to cross at 2 blocks/second
 	
 	private double NOISE_SCALE_MOUNTAINS = 128.0d;
