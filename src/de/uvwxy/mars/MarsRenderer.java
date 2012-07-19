@@ -76,7 +76,7 @@ public class MarsRenderer {
 		int c_x = camera.getX() / mars.CHUNK_N;
 		int c_y = camera.getY() / mars.CHUNK_N;
 		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x + 1, c_y + 1)), s);
-		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x + 1, c_y)), s);
+		 renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x + 1, c_y)), s);
 		renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x, c_y)), s);
 		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x - 1, c_y)), s);
 		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x - 1, c_y - 1)), s);
@@ -154,7 +154,7 @@ public class MarsRenderer {
 
 		int width = (int) (mars.CHUNK_N * cube_img_width);
 		// determine how many maximum stacked cubes
-		int height = high_z - low_z;
+		int height = high_z - low_z + cube_img_height;
 		// removed ""
 
 		Log.i("MARS", "image data size " + width + "/" + height);
@@ -170,7 +170,7 @@ public class MarsRenderer {
 		// draw single chunks
 		for (int x = c.getN() - 1; x >= 0; x--) {
 			for (int y = c.getN() - 1; y >= 0; y--) {
-				renderCubeOnDataCanvas(canvas, x, y, c.getHeight(x, y), low_z);
+				renderCubeOnDataCanvas(canvas, x, y, c.getHeight(x, y), low_z - cube_img_height);
 			}
 		}
 		int h = getCubeScreenYAbsoluteHeight(c.getN() - 1, 0, c.getHeight(c.getN() - 1, 0)) - low_z;
@@ -182,11 +182,13 @@ public class MarsRenderer {
 		Log.i("MARS", "BMP COUNT = " + bmp_count);
 	}
 
-	private void renderCubeOnDataCanvas(Canvas canvas, int x, int y, int z, int y_s) {
-		//int ys = (int) (getCubeScreenYAbsoluteHeight(x, y, z) + y_s);
-		// Log.i("MARS", "Render cube: " + x + "/" + y + "/" + z + "  --->  " + ys);
+	private void renderCubeOnDataCanvas(Canvas canvas, int x, int y, int z, int low_z) {
+		int ys = getCubeScreenYAbsoluteHeight(x, y, z) - low_z;
+		Log.i("MARS", "Render cube: " + x + "/" + y + "/" + z + "  --->  " + getCubeScreenYAbsoluteHeight(x, y, z));
 		Matrix m = new Matrix();
-		m.postTranslate((cube_img_width / 2 + getScreenX(x, y, canvas.getWidth() / 2)), (canvas.getHeight() - y_s));
+		float xt = (cube_img_width / 2 + getScreenX(x, y, canvas.getWidth() / 2));
+		float yt = (canvas.getHeight() - ys);
+		m.postTranslate(xt, yt);
 		canvas.drawBitmap(base_image, m, paint);
 		// Paint p = new Paint();
 		// p.setColor(Color.RED);
