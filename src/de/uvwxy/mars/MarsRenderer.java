@@ -24,8 +24,6 @@ public class MarsRenderer {
 	private int canvas_center_x;
 	private int canvas_center_y;
 
-	private Matrix matrix_camera = new Matrix();
-	private Matrix matrix = new Matrix();
 	private Paint paint = new Paint();
 
 	int scaled_cube_img_width;
@@ -49,6 +47,8 @@ public class MarsRenderer {
 
 	int radius = 1;
 
+	int bmp_count = 0;
+
 	public void render(Canvas canvas, Mars mars, MarsCamera camera) {
 		canvas_width = canvas.getWidth();
 		canvas_height = canvas.getHeight();
@@ -56,8 +56,8 @@ public class MarsRenderer {
 		canvas_center_y = canvas_height / 2;
 
 		// TODO: fix this scaling to actual height!
-		float s = (2.f / (camera.getZ()));
-		matrix_camera.setScale(s, s, cube_img_width * s, cube_img_height * s);
+		float s = (20.f / (camera.getZ() + 18));
+		s *= 0.5f;
 
 		scaled_cube_img_width = (int) (s * cube_img_width);
 		scaled_cube_img_height = (int) (s * cube_img_height);
@@ -73,11 +73,15 @@ public class MarsRenderer {
 		// }
 		// }
 
-		int c_x = 0;// camera.getX()/mars.CHUNK_N;
-		int c_y = 0;// camera.getY()/mars.CHUNK_N;
+		int c_x = camera.getX() / mars.CHUNK_N;
+		int c_y = camera.getY() / mars.CHUNK_N;
+		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x + 1, c_y + 1)), s);
+		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x + 1, c_y)), s);
 		renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x, c_y)), s);
-		renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x + 1, c_y)), s);
-		renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x - 1, c_y)), s);
+		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x - 1, c_y)), s);
+		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x - 1, c_y - 1)), s);
+		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x, c_y + 1)), s);
+		// renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x, c_y - 1)), s);
 
 		// renderCube(canvas, 0, 0, 0, camera, mars);
 		// renderOneSquare(canvas, mars, camera);
@@ -97,7 +101,7 @@ public class MarsRenderer {
 
 	private void renderChunk(Canvas canvas, MarsCamera camera, Mars mars, MarsChunk c, float data_scale_value) {
 		// check if prerendered screen data exists
-		if (c.getScreen_data() == null || c.getScreen_data_scale_value() != data_scale_value) {
+		if (c.getScreen_data() == null) {
 			// if no: redraw (should produce lag)
 			createChunkImageData(mars, data_scale_value, c);
 		}
@@ -107,15 +111,19 @@ public class MarsRenderer {
 	}
 
 	private void renderImageData(Canvas canvas, MarsCamera camera, Mars mars, MarsChunk c, float data_scale_value) {
-		int z = -mars.getHeight(camera.getX(), camera.getY());
+		int x = c.getX() - camera.getX() / Mars.CHUNK_N;
+		int y = c.getY() - camera.getY() / Mars.CHUNK_N;
 		// scale according to camera height
-		Matrix m = new Matrix(matrix_camera);
-		setMatrixTo(c.getX() - camera.getX() / mars.CHUNK_N, c.getY() - camera.getY() / mars.CHUNK_N, z);
-		// m.postConcat(matrix);
-		// canvas.drawBitmap(c.getScreen_data(), m, paint);
-		canvas.drawBitmap(c.getScreen_data(),
-				-data_scale_value*c.getScreen_data().getWidth() / 2 + (getScreenX(c.getX() * c.getN(), 0, canvas.getWidth() / 2))*data_scale_value,
-				canvas.getHeight()-c.getScreen_right_hand_box_height()+c.getX()*cube_img_height/2, paint);
+		Matrix m = new Matrix();
+		m.setScale(data_scale_value, data_scale_value);
+
+		float tx = canvas.getWidth() / 2 - data_scale_value
+				* (c.getScreen_data().getWidth() / 2 + c.getX() * c.getScreen_data().getWidth() / 2);
+		float ty = canvas.getHeight() - data_scale_value * (x + y) * cube_img_height
+				- c.getScreen_right_hand_box_height();
+		ty -= Math.signum(x) * (cube_img_height - cube_diag_pixels) * data_scale_value;
+		m.postTranslate(tx, ty);
+		canvas.drawBitmap(c.getScreen_data(), m, paint);
 	}
 
 	private void createChunkImageData(Mars mars, float data_scale_value, MarsChunk c) {
@@ -144,14 +152,11 @@ public class MarsRenderer {
 
 		Log.i("MARS", "high_y/low_y = " + high_z + "/" + low_z);
 
-		int width = mars.CHUNK_N * cube_img_width;
+		int width = (int) (mars.CHUNK_N * cube_img_width);
 		// determine how many maximum stacked cubes
-		int height = high_z;
-		// removed "- low_z"
+		int height = high_z - low_z;
+		// removed ""
 
-		width = (int) (width*data_scale_value);
-		height = (int) (height*data_scale_value);
-		
 		Log.i("MARS", "image data size " + width + "/" + height);
 
 		Bitmap ret = Bitmap.createBitmap(width, height, Config.ARGB_8888);
@@ -165,22 +170,23 @@ public class MarsRenderer {
 		// draw single chunks
 		for (int x = c.getN() - 1; x >= 0; x--) {
 			for (int y = c.getN() - 1; y >= 0; y--) {
-				renderCubeOnDataCanvas(canvas, x, y, c.getHeight(x, y), data_scale_value);
+				renderCubeOnDataCanvas(canvas, x, y, c.getHeight(x, y), low_z);
 			}
 		}
 		int h = getCubeScreenYAbsoluteHeight(c.getN() - 1, 0, c.getHeight(c.getN() - 1, 0)) - low_z;
 		Log.i("MARS", "h = " + h);
-		c.setScreen_right_hand_box_height(low_z);
+		c.setScreen_right_hand_box_height((int) ((high_z) * data_scale_value));
 		c.setScreen_data_scale_value(data_scale_value);
 		c.setScreen_data(ret);
+		bmp_count++;
+		Log.i("MARS", "BMP COUNT = " + bmp_count);
 	}
 
-	private void renderCubeOnDataCanvas(Canvas canvas, int x, int y, int z, float data_scale_value) {
-		int ys = getCubeScreenYAbsoluteHeight(x, y, z);
+	private void renderCubeOnDataCanvas(Canvas canvas, int x, int y, int z, int y_s) {
+		//int ys = (int) (getCubeScreenYAbsoluteHeight(x, y, z) + y_s);
 		// Log.i("MARS", "Render cube: " + x + "/" + y + "/" + z + "  --->  " + ys);
 		Matrix m = new Matrix();
-		m.setScale(data_scale_value, data_scale_value, cube_img_width/2, cube_img_height/2);
-		m.postTranslate((cube_img_width / 2 + getScreenX(x, y, canvas.getWidth() / 2))*data_scale_value, (canvas.getHeight() - ys)*data_scale_value);
+		m.postTranslate((cube_img_width / 2 + getScreenX(x, y, canvas.getWidth() / 2)), (canvas.getHeight() - y_s));
 		canvas.drawBitmap(base_image, m, paint);
 		// Paint p = new Paint();
 		// p.setColor(Color.RED);
@@ -209,20 +215,4 @@ public class MarsRenderer {
 				- (scaled_cube_img_diag_pixels / 2) * (x + y);
 	}
 
-	private void setMatrixTo(int x, int y, int z) {
-		matrix.setTranslate(getScreenXScaled(x, y, z), getScreenYScaled(x, y, z));
-	}
-
-	private void calculateVisibleChunks() {
-		// TODO
-	}
-
-	// private void drawChunk(MarsChunk c, Canvas canvas, MarsCamera camera, Mars mars) {
-	// for (int x = c.getN() - 1; x >= 0; x--) {
-	// for (int y = c.getN() - 1; y >= 0; y--) {
-	// renderCube(canvas, x + c.getN() * c.getX() - camera.getX(), y + c.getN() * c.getY() - camera.getY(),
-	// c.getHeight(x, y), camera, mars);
-	// }
-	// }
-	// }
 }
