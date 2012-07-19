@@ -131,9 +131,9 @@ public class MarsRenderer {
 
 		float tx = canvas.getWidth() / 2 + data_scale_value
 				* (c.getScreen_data().getWidth() / 2 + (x - y) * c.getScreen_data().getWidth() / 2);
-		float ty = canvas.getHeight() - data_scale_value * (y*2) * cube_img_height - data_scale_value * (x) * cube_img_height
+		float ty = canvas.getHeight() - data_scale_value * (y) * (cube_diag_pixels*Mars.CHUNK_N/2) - data_scale_value * (x) * (cube_diag_pixels)
 				- c.getScreen_right_hand_box_height();
-		ty -= Math.signum(x) * (cube_img_height - 8) * data_scale_value;
+//		ty -= Math.signum(x) * (cube_img_height - 8) * data_scale_value;
 		
 
 		m.postTranslate(tx, ty);
