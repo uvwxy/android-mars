@@ -131,9 +131,9 @@ public class MarsRenderer {
 
 		float tx = canvas.getWidth() / 2 + data_scale_value
 				* (c.getScreen_data().getWidth() / 2 + (x - y) * c.getScreen_data().getWidth() / 2);
-		float ty = canvas.getHeight() - data_scale_value * (y) * (cube_diag_pixels*Mars.CHUNK_N/2) - data_scale_value * (x) * (cube_diag_pixels)
-				- c.getScreen_right_hand_box_height();
-//		ty -= Math.signum(x) * (cube_img_height - 8) * data_scale_value;
+		float ty = canvas.getHeight() - data_scale_value * (y) * (cube_diag_pixels*Mars.CHUNK_N/2) 
+				- c.getScreen_right_hand_box_height()*data_scale_value;
+		ty -= Math.signum(x) * (cube_img_height - 8) * data_scale_value;
 		
 
 		m.postTranslate(tx, ty);
@@ -189,7 +189,7 @@ public class MarsRenderer {
 		}
 		int h = getCubeScreenYAbsoluteHeight(c.getN() - 1, 0, c.getHeight(c.getN() - 1, 0)) - low_z;
 		Log.i("MARS", "h = " + h);
-		c.setScreen_right_hand_box_height((int) ((high_z) * data_scale_value));
+		c.setScreen_right_hand_box_height((int) ((high_z)));
 		c.setScreen_data_scale_value(data_scale_value);
 		c.setScreen_data(ret);
 		bmp_count++;
@@ -204,8 +204,6 @@ public class MarsRenderer {
 		float yt = (canvas.getHeight() - ys);
 		m.postTranslate(xt, yt);
 		canvas.drawBitmap(base_image, m, paint);
-		// Paint p = new Paint();
-		// p.setColor(Color.RED);
 
 	}
 
