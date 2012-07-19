@@ -12,6 +12,7 @@ public class MarsChunk implements Serializable {
 
 	private Bitmap screen_data;
 	private double screen_data_scale_value;
+	private int screen_right_hand_box_height;
 
 	private int[][] heightmap;
 	private int[][] object_data;
@@ -51,6 +52,14 @@ public class MarsChunk implements Serializable {
 
 	public void setScreen_data_scale_value(double screen_data_scale_value) {
 		this.screen_data_scale_value = screen_data_scale_value;
+	}
+
+	public int getScreen_right_hand_box_height() {
+		return screen_right_hand_box_height;
+	}
+
+	public void setScreen_right_hand_box_height(int screen_right_hand_box_height) {
+		this.screen_right_hand_box_height = screen_right_hand_box_height;
 	}
 
 	public MarsChunkID getId() {

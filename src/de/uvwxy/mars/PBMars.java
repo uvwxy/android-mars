@@ -46,7 +46,7 @@ public class PBMars extends PaintBox {
 	}
 
 	public void init() {
-		gen = new MarsGenerator(42);
+		gen = new MarsGenerator((int) (Math.random()*1024));
 		mars = new Mars(gen, 8);
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
 		// renderer = new MarsRenderer(context, R.drawable.mc_fixed, 228);
