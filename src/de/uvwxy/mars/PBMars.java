@@ -52,10 +52,11 @@ public class PBMars extends PaintBox {
 			gen = new LevelMarsGenerator((int) (Math.random()*1024));
 		else
 			gen = new MarsGenerator((int) (Math.random()*1024));
-		mars = new Mars(gen, 8);
+		mars = new Mars(gen, 16);
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
 //		 renderer = new MarsRenderer(context, R.drawable.mc_fixed, 228);
-		renderer = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30);
+//		renderer = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30);
+		renderer = new MarsRenderer(context, R.drawable.mc_fixed_nano, 8);
 
 		camera = new MarsCamera(0, 0, 2, 0);
 		// TODO: regain some texture here:
