@@ -15,10 +15,12 @@ public class LevelMarsGenerator extends MarsGenerator {
 	public int getHeight(int x, int y) {
 		x+=10;
 		y+=10;
+		x = Math.abs(x);
+		y = Math.abs(y);
 		int ret = 0;
-		ret = 16 - (x+y)/2;
+		ret = 5 - (x+y)/2;
 		ret = ret < 0 ? 0 : ret;
-		return ret;
+		return ret+32;
 	}
 
 }
