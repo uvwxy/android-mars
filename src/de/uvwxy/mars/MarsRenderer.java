@@ -198,7 +198,7 @@ public class MarsRenderer {
 
 	private void renderCubeOnDataCanvas(Canvas canvas, int x, int y, int z, int low_z) {
 		int ys = getCubeScreenYAbsoluteHeight(x, y, z) - low_z;
-		Log.i("MARS", "Render cube: " + x + "/" + y + "/" + z + "  --->  " + getCubeScreenYAbsoluteHeight(x, y, z));
+//		Log.i("MARS", "Render cube: " + x + "/" + y + "/" + z + "  --->  " + getCubeScreenYAbsoluteHeight(x, y, z));
 		Matrix m = new Matrix();
 		float xt = (cube_img_width / 2 + getScreenX(x, y, canvas.getWidth() / 2));
 		float yt = (canvas.getHeight() - ys);
