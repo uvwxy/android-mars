@@ -35,19 +35,19 @@ public class MarsRenderer {
 
 	Paint black = new Paint();
 
-	public MarsRenderer(Context context, int res_id, int cube_diag_pixels) {
+	public MarsRenderer(Context context, int res_id, int cube_diag_pixels, int radius) {
 		base_image = BitmapFactory.decodeResource(context.getResources(), res_id);
 		cube_img_width = base_image.getWidth();
 		cube_img_height = base_image.getHeight();
 		this.cube_diag_pixels = cube_diag_pixels;
-
+		this.radius = radius;
 		black.setColor(Color.BLACK);
 		black.setStyle(Style.FILL);
 	}
 
-	int radius = 1;
+	private int radius = 1;
 
-	int bmp_count = 0;
+	private int bmp_count = 0;
 
 	public void render(Canvas canvas, Mars mars, MarsCamera camera) {
 		canvas_width = canvas.getWidth();
@@ -67,10 +67,10 @@ public class MarsRenderer {
 
 		int c_x = camera.getX() / mars.CHUNK_N;
 		int c_y = camera.getY() / mars.CHUNK_N;
-		int w = 3;
+		
 
-		for (int i = w; i >= -w; i--) {
-			for (int j = w; j >= -w; j--) {
+		for (int i = radius; i >= -radius; i--) {
+			for (int j = radius; j >= -radius; j--) {
 				renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID(c_x + i, c_y + j)), s);
 			}
 		}
@@ -96,9 +96,9 @@ public class MarsRenderer {
 
 		float tx = canvas.getWidth() / 2 + data_scale_value
 				* (c.getScreen_data().getWidth() / 2 + (x - y) * c.getScreen_data().getWidth() / 2);
-		float ty = canvas.getHeight()/2 - data_scale_value * (y + x) * (cube_diag_pixels * Mars.CHUNK_N / 2)
+		float ty = canvas.getHeight() / 2 - data_scale_value * (y + x) * (cube_diag_pixels * Mars.CHUNK_N / 2)
 				- c.getScreen_right_hand_box_height() * data_scale_value;
-		ty+=mars.getHeight(0, 0)*data_scale_value*cube_diag_pixels;
+		ty += mars.getHeight(0, 0) * data_scale_value * cube_diag_pixels;
 		m.postTranslate(tx, ty);
 		canvas.drawBitmap(c.getScreen_data(), m, paint);
 	}
@@ -127,20 +127,19 @@ public class MarsRenderer {
 
 		int width = (int) (mars.CHUNK_N * cube_img_width);
 		int height = high_z - low_z + cube_img_height;
-	
 
 		Log.i("MARS", "image data size " + width + "/" + height);
 
 		Bitmap ret = Bitmap.createBitmap(width, height, Config.ARGB_8888);
 		Canvas canvas = new Canvas(ret);
-		
+
 		if (PBMars.DEBUG) {
 			Paint red = new Paint();
 			red.setColor(Color.argb(25, (int) (Math.random() * 255), (int) (Math.random() * 255),
 					(int) (Math.random() * 255)));
 			canvas.drawRect(0, 0, ret.getWidth(), ret.getHeight(), red);
 		}
-		
+
 		MarsCamera camera = new MarsCamera(0, 0, 2, 0);
 
 		// draw single chunks
@@ -176,6 +175,5 @@ public class MarsRenderer {
 	private int getCubeScreenYAbsoluteHeight(int x, int y, int z) {
 		return cube_img_height + (cube_img_height - cube_diag_pixels) * z + (cube_diag_pixels / 2) * (x + y);
 	}
-
 
 }

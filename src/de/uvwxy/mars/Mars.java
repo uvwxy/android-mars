@@ -53,4 +53,10 @@ public class Mars {
 	public boolean contains(MarsChunkID id) {
 		return chunks.containsKey(id);
 	}
+	
+	public void clearScreenData(){
+		for (MarsChunk c : chunks.values()){
+			c.setScreen_data(null);
+		}
+	}
 }

@@ -16,14 +16,16 @@ import de.uvwxy.panzoom.PanZoomListener;
 import de.uvwxy.panzoom.PanZoomResult;
 
 public class PBMars extends PaintBox {
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
 
 	private Context context;
 	private boolean initOnce = false;
 
 	MarsGenerator gen = null;
 	Mars mars = null;
-	MarsRenderer renderer = null;
+	MarsRenderer renderer_low = null;
+	MarsRenderer renderer_med = null;
+	MarsRenderer renderer_high = null;
 	MarsCamera camera = null;
 
 	private PanZoomListener panZoom = new PanZoomListener();
@@ -52,15 +54,17 @@ public class PBMars extends PaintBox {
 			gen = new LevelMarsGenerator((int) (Math.random() * 1024));
 		else
 			gen = new MarsGenerator((int) (Math.random() * 1024));
-		mars = new Mars(gen, 16);
+		mars = new Mars(gen, 8);
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
-		// renderer = new MarsRenderer(context, R.drawable.mc_fixed, 228);
+		renderer_high = new MarsRenderer(context, R.drawable.mc_fixed_high, 56, 1);
 		// renderer = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30);
-		renderer = new MarsRenderer(context, R.drawable.mc_fixed_nano, 8);
-
+		renderer_low = new MarsRenderer(context, R.drawable.mc_fixed_nano, 8, 6);
+		renderer_med = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30, 2);
 		camera = new MarsCamera(0, 0, 2, 0);
 		// TODO: regain some texture here:
 	}
+
+	int c = 0;
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -69,7 +73,68 @@ public class PBMars extends PaintBox {
 			initOnce = true;
 		}
 
-		renderer.render(canvas, mars, camera);
+		switch (c) {
+		case 0:
+			renderer_high.render(canvas, mars, camera);
+			break;
+		case 1:
+			renderer_med.render(canvas, mars, camera);
+			break;
+		case 2:
+			renderer_low.render(canvas, mars, camera);
+
+			break;
+		}
+	}
+
+	int last_z = -1;
+	int stage_0 = 20;
+	int stage_1 = 60;
+
+	private void switchRenderIfNeeded() {
+		if (last_z == -1) {
+			last_z = camera.getZ();
+			return;
+		}
+		Log.i("MARS", "last_z = " + last_z + ", camera_z + " + camera.getZ());
+
+		if (camera.getZ() > stage_0 && stage_0 <= last_z) {
+			if (c != 1) {
+				c = 1;
+				mars.clearScreenData();
+				Log.i("MARS", "set c = " + c);
+				return;
+			}
+		}
+
+		if (camera.getZ() > stage_1 && stage_1 <= last_z) {
+			if (c != 2) {
+				c = 2;
+				mars.clearScreenData();
+				Log.i("MARS", "set c = " + c);
+				return;
+			}
+		}
+
+		if (camera.getZ() < stage_1 && stage_1 >= last_z) {
+			if (c != 1) {
+				c = 1;
+				mars.clearScreenData();
+				Log.i("MARS", "set c = " + c);
+				return;
+			}
+		}
+
+		if (camera.getZ() < stage_0 && stage_0 >= last_z) {
+			if (c != 0) {
+				c = 0;
+				mars.clearScreenData();
+				Log.i("MARS", "set c = " + c);
+				return;
+			}
+		}
+
+		last_z = camera.getZ();
 	}
 
 	private OnTouchListener touchClickListener = new OnTouchListener() {
@@ -89,8 +154,10 @@ public class PBMars extends PaintBox {
 			case ZOOM:
 				if (panZoomResult.scale < 1) {
 					camera.up();
+					switchRenderIfNeeded();
 				} else {
 					camera.down();
+					switchRenderIfNeeded();
 				}
 				break;
 			}
