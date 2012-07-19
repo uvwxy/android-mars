@@ -17,7 +17,7 @@ import de.uvwxy.panzoom.PanZoomResult;
 
 public class PBMars extends PaintBox {
 	public static boolean DEBUG = false;
-	
+
 	private Context context;
 	private boolean initOnce = false;
 
@@ -49,13 +49,13 @@ public class PBMars extends PaintBox {
 
 	public void init() {
 		if (DEBUG)
-			gen = new LevelMarsGenerator((int) (Math.random()*1024));
+			gen = new LevelMarsGenerator((int) (Math.random() * 1024));
 		else
-			gen = new MarsGenerator((int) (Math.random()*1024));
+			gen = new MarsGenerator((int) (Math.random() * 1024));
 		mars = new Mars(gen, 16);
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
-//		 renderer = new MarsRenderer(context, R.drawable.mc_fixed, 228);
-//		renderer = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30);
+		// renderer = new MarsRenderer(context, R.drawable.mc_fixed, 228);
+		// renderer = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30);
 		renderer = new MarsRenderer(context, R.drawable.mc_fixed_nano, 8);
 
 		camera = new MarsCamera(0, 0, 2, 0);
@@ -89,10 +89,8 @@ public class PBMars extends PaintBox {
 			case ZOOM:
 				if (panZoomResult.scale < 1) {
 					camera.up();
-					Log.i("MARS", "CAMERA UP");
 				} else {
 					camera.down();
-					Log.i("MARS", "CAMERA DOWN");
 				}
 				break;
 			}
@@ -149,7 +147,6 @@ public class PBMars extends PaintBox {
 			consumeFingerDown(9, event.getX(9), event.getY(9));
 			break;
 		case MotionEvent.ACTION_UP:
-			Log.i("REMIND", "Fingers cleared");
 			// all fingers gone, reset mask
 			for (int i = 0; i < fingerDown.length; i++) {
 				fingerDown[i] = false;
@@ -163,7 +160,6 @@ public class PBMars extends PaintBox {
 	boolean[] fingerUsed = new boolean[10];
 
 	private void setFingersDown(int f) {
-		Log.i("REMIND", "Fingers down: " + f);
 		for (int i = 0; i < f; i++) {
 			fingerDown[i] = true;
 		}
