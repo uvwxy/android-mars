@@ -16,7 +16,7 @@ import de.uvwxy.panzoom.PanZoomListener;
 import de.uvwxy.panzoom.PanZoomResult;
 
 public class PBMars extends PaintBox {
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	private Context context;
 	private boolean initOnce = false;
@@ -57,8 +57,8 @@ public class PBMars extends PaintBox {
 		mars = new Mars(gen, 8);
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
 		renderer_high = new MarsRenderer(context, R.drawable.mc_fixed_high, 56, 1);
-		// renderer = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30);
-		renderer_low = new MarsRenderer(context, R.drawable.mars_cube_border_tiny, 14, 6);
+		// new MarsRenderer(context, R.drawable.mars_cube_border_tiny, 14, 6);
+		renderer_low = new MarsRenderer(context, R.drawable.mc_fixed_nano, 10, 6);
 		renderer_med = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30, 2);
 		camera = new MarsCamera(0, 0, 2, 0);
 		// TODO: regain some texture here:
@@ -74,18 +74,18 @@ public class PBMars extends PaintBox {
 		}
 		renderer_low.render(canvas, mars, camera);
 
-//		switch (c) {
-//		case 0:
-//			renderer_high.render(canvas, mars, camera);
-//			break;
-//		case 1:
-//			renderer_med.render(canvas, mars, camera);
-//			break;
-//		case 2:
-//			renderer_low.render(canvas, mars, camera);
-//
-//			break;
-//		}
+		// switch (c) {
+		// case 0:
+		// renderer_high.render(canvas, mars, camera);
+		// break;
+		// case 1:
+		// renderer_med.render(canvas, mars, camera);
+		// break;
+		// case 2:
+		// renderer_low.render(canvas, mars, camera);
+		//
+		// break;
+		// }
 	}
 
 	float last_z = -1;
@@ -138,6 +138,8 @@ public class PBMars extends PaintBox {
 		last_z = camera.getZ();
 	}
 
+	private float scroll_speed = 0.02f;
+
 	private OnTouchListener touchClickListener = new OnTouchListener() {
 
 		public boolean onTouch(View v, MotionEvent event) {
@@ -149,16 +151,16 @@ public class PBMars extends PaintBox {
 				handleFingers(event);
 				break;
 			case PAN:
-				camera.moveXBy( -panZoomResult.x);
-				camera.moveYBy( panZoomResult.y);
+				camera.moveYBy((-panZoomResult.y*scroll_speed - panZoomResult.x*scroll_speed)*-1.f);//(-panZoomResult.y * scroll_speed + panZoomResult.y * scroll_speed)*-1.f);
+				camera.moveXBy((panZoomResult.x*scroll_speed - panZoomResult.y*scroll_speed)*-1.f);//(-panZoomResult.x * scroll_speed + panZoomResult.y * scroll_speed));
 				break;
 			case ZOOM:
 				if (panZoomResult.scale < 1) {
 					camera.up();
-//					switchRenderIfNeeded();
+					// switchRenderIfNeeded();
 				} else {
 					camera.down();
-//					switchRenderIfNeeded();
+					// switchRenderIfNeeded();
 				}
 				break;
 			}
