@@ -1,10 +1,10 @@
 package de.uvwxy.mars;
 
 public class MarsCamera {
-	private static final int MINIMUM_HEIGHT = 2;
-	private static final int MAXIMUM_HEIGHT = 256;
+	private static final float MINIMUM_HEIGHT = 2;
+	private static final float MAXIMUM_HEIGHT = 256;
 
-	int x, y, z;
+	float x, y, z;
 
 	// compass angles:
 	// 0 = "up"
@@ -13,7 +13,7 @@ public class MarsCamera {
 	// 270 = "left"
 	double angle;
 
-	public MarsCamera(int x, int y, int z, double angle) {
+	public MarsCamera(float x, float y, float z, double angle) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -21,27 +21,27 @@ public class MarsCamera {
 		this.angle = angle;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	public int getZ() {
+	public float getZ() {
 		return z;
 	}
 
-	public void setZ(int z) {
+	public void setZ(float z) {
 		this.z = z;
 	}
 
@@ -53,11 +53,11 @@ public class MarsCamera {
 		this.angle = angle;
 	}
 
-	public void moveXBy(int diff) {
+	public void moveXBy(float diff) {
 		x += diff;
 	}
 
-	public void moveYBy(int diff) {
+	public void moveYBy(float diff) {
 		y += diff;
 	}
 

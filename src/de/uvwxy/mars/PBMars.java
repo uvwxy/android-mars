@@ -58,7 +58,7 @@ public class PBMars extends PaintBox {
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
 		renderer_high = new MarsRenderer(context, R.drawable.mc_fixed_high, 56, 1);
 		// renderer = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30);
-		renderer_low = new MarsRenderer(context, R.drawable.mc_fixed_nano, 8, 6);
+		renderer_low = new MarsRenderer(context, R.drawable.mars_cube_border_tiny, 14, 6);
 		renderer_med = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30, 2);
 		camera = new MarsCamera(0, 0, 2, 0);
 		// TODO: regain some texture here:
@@ -72,22 +72,23 @@ public class PBMars extends PaintBox {
 			init();
 			initOnce = true;
 		}
+		renderer_low.render(canvas, mars, camera);
 
-		switch (c) {
-		case 0:
-			renderer_high.render(canvas, mars, camera);
-			break;
-		case 1:
-			renderer_med.render(canvas, mars, camera);
-			break;
-		case 2:
-			renderer_low.render(canvas, mars, camera);
-
-			break;
-		}
+//		switch (c) {
+//		case 0:
+//			renderer_high.render(canvas, mars, camera);
+//			break;
+//		case 1:
+//			renderer_med.render(canvas, mars, camera);
+//			break;
+//		case 2:
+//			renderer_low.render(canvas, mars, camera);
+//
+//			break;
+//		}
 	}
 
-	int last_z = -1;
+	float last_z = -1;
 	int stage_0 = 20;
 	int stage_1 = 60;
 
@@ -148,16 +149,16 @@ public class PBMars extends PaintBox {
 				handleFingers(event);
 				break;
 			case PAN:
-				camera.moveXBy((int) panZoomResult.x);
-				camera.moveYBy((int) panZoomResult.y);
+				camera.moveXBy( -panZoomResult.x);
+				camera.moveYBy( panZoomResult.y);
 				break;
 			case ZOOM:
 				if (panZoomResult.scale < 1) {
 					camera.up();
-					switchRenderIfNeeded();
+//					switchRenderIfNeeded();
 				} else {
 					camera.down();
-					switchRenderIfNeeded();
+//					switchRenderIfNeeded();
 				}
 				break;
 			}
