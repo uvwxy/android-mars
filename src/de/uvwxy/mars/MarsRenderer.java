@@ -55,6 +55,8 @@ public class MarsRenderer {
 		canvas_center_x = canvas_width / 2;
 		canvas_center_y = canvas_height / 2;
 
+		camera = camera.copy();
+		
 		// TODO: fix this scaling to actual height!
 		float s = (160.f / (camera.getZ() + 18));
 		s *= 0.5f;
@@ -129,7 +131,7 @@ public class MarsRenderer {
 
 		// Log.i("MARS", "image data size " + width + "/" + height);
 
-		Bitmap ret = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+		Bitmap ret = Bitmap.createBitmap(width, height, Config.ARGB_4444);
 		Canvas canvas = new Canvas(ret);
 
 		if (PBMars.DEBUG) {

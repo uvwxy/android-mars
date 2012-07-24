@@ -58,7 +58,7 @@ public class PBMars extends PaintBox {
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
 		renderer_high = new MarsRenderer(context, R.drawable.mc_fixed_high, 56, 1);
 		// new MarsRenderer(context, R.drawable.mars_cube_border_tiny, 14, 6);
-		renderer_low = new MarsRenderer(context, R.drawable.mc_fixed_nano, 10, 6);
+		renderer_low = new MarsRenderer(context, R.drawable.mc_fixed_nano, 10, 24);
 		renderer_med = new MarsRenderer(context, R.drawable.mc_fixed_tiny, 30, 2);
 		camera = new MarsCamera(0, 0, 2, 0);
 		// TODO: regain some texture here:

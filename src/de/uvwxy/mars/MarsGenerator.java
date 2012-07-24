@@ -12,7 +12,7 @@ public class MarsGenerator {
 	private double NOISE_CRATERS_BELOW = 0.7;
 	private double NOISE_SCALE_CRATERS = 32.0d;
 	private double NOISE_SCALE_CRATERS_SIZE = 1.0d / 12.0d;
-	private double NOISE_GRAVEL_BELOW = 0.8;
+	private double NOISE_GRAVEL_BELOW = 0.5;
 	private double NOISE_SCALE_GRAVEL = 2.0d;
 	private double NOISE_SCALE_GRAVEL_SIZE = 1.0d / 64.0d;
 

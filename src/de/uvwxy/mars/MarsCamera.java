@@ -69,4 +69,8 @@ public class MarsCamera {
 		z--;
 		z = z < MINIMUM_HEIGHT ? MINIMUM_HEIGHT : z;
 	}
+
+	public MarsCamera copy() {
+		return new MarsCamera(x,y,z, angle);
+	}
 }
