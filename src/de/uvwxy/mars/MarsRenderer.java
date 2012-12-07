@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -36,7 +37,9 @@ public class MarsRenderer {
 	Paint black = new Paint();
 
 	public MarsRenderer(Context context, int res_id, int cube_diag_pixels, int radius) {
-		base_image = BitmapFactory.decodeResource(context.getResources(), res_id);
+		Options opts = new Options();
+		opts.inScaled = false;
+		base_image = BitmapFactory.decodeResource(context.getResources(), res_id, opts);
 		cube_img_width = base_image.getWidth();
 		cube_img_height = base_image.getHeight();
 		this.cube_diag_pixels = cube_diag_pixels;
@@ -56,7 +59,7 @@ public class MarsRenderer {
 		canvas_center_y = canvas_height / 2;
 
 		camera = camera.copy();
-		
+
 		// TODO: fix this scaling to actual height!
 		float s = (160.f / (camera.getZ() + 18));
 		s *= 0.5f;
@@ -73,6 +76,17 @@ public class MarsRenderer {
 		for (int i = radius; i >= -radius; i--) {
 			for (int j = radius; j >= -radius; j--) {
 				renderChunk(canvas, camera, mars, mars.getChunk(new MarsChunkID((int) (c_x + i), (int) (c_y + j))), s);
+			}
+		}
+
+		int radiusToKeep = 6;
+		radiusToKeep++;
+		// free memory from invisible chunks
+		for (MarsChunk c : mars.getChunks().values()) {
+			if (c.getScreen_data() != null
+					&& (c.getX() < c_x - radius - radiusToKeep || c.getX() > c_x + radius + radiusToKeep
+							|| c.getY() < c_y - radius - radiusToKeep || c.getY() > c_y + radius + radiusToKeep)) {
+				c.clearScren_data();
 			}
 		}
 	}

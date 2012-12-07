@@ -36,6 +36,10 @@ public class Mars {
 		return getChunk(new MarsChunkID(x, y)).getHeight(mx, my);
 	}
 
+	public HashMap<MarsChunkID, MarsChunk> getChunks() {
+		return chunks;
+	}
+	
 	public MarsChunk getChunk(MarsChunkID id) {
 		if (!contains(id)) {
 			generate(id);

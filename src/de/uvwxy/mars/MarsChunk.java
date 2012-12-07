@@ -3,6 +3,7 @@ package de.uvwxy.mars;
 import java.io.Serializable;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class MarsChunk implements Serializable {
 	private static final long serialVersionUID = 3530480190643342044L;
@@ -44,6 +45,11 @@ public class MarsChunk implements Serializable {
 
 	public void setScreen_data(Bitmap screen_data) {
 		this.screen_data = screen_data;
+	}
+
+	public void clearScren_data() {
+		Log.i("MARS", "Freed " + getX() + "/" + getY());
+		this.screen_data = null;
 	}
 
 	public double getScreen_data_scale_value() {
