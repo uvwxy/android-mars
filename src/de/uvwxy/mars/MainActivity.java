@@ -1,14 +1,8 @@
 package de.uvwxy.mars;
 
-import de.uvwxy.panzoom.PanZoomListener;
-import de.uvwxy.panzoom.PanZoomResult;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 
 public class MainActivity extends Activity {
 	private PBMars pbMars = null;

@@ -164,12 +164,12 @@ public class MarsRenderer {
 			}
 		}
 		int h = getCubeScreenYAbsoluteHeight(c.getN() - 1, 0, c.getHeight(c.getN() - 1, 0)) - low_z;
-		Log.i("MARS", "h = " + h);
+//		Log.i("MARS", "h = " + h);
 		c.setScreen_right_hand_box_height((int) ((high_z)));
 		c.setScreen_data_scale_value(data_scale_value);
 		c.setScreen_data(ret);
 		bmp_count++;
-		Log.i("MARS", "BMP COUNT = " + bmp_count);
+//		Log.i("MARS", "BMP COUNT = " + bmp_count);
 	}
 
 	private void renderCubeOnDataCanvas(Canvas canvas, int x, int y, int z, int low_z) {

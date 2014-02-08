@@ -1,6 +1,5 @@
 package de.uvwxy.mars;
 
-import android.util.Log;
 
 /**
  * Improved version of {@link Noise}.

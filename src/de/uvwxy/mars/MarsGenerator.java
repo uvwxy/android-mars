@@ -1,7 +1,5 @@
 package de.uvwxy.mars;
 
-import android.graphics.Color;
-import android.util.Log;
 
 public class MarsGenerator {
 

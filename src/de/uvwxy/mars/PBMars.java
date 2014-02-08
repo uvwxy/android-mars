@@ -1,16 +1,11 @@
 package de.uvwxy.mars;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import de.uvwxy.paintbox.PaintBox;
 import de.uvwxy.panzoom.PanZoomListener;
 import de.uvwxy.panzoom.PanZoomResult;
@@ -54,6 +49,8 @@ public class PBMars extends PaintBox {
 			gen = new LevelMarsGenerator((int) (Math.random() * 1024));
 		else
 			gen = new MarsGenerator((int) (Math.random() * 1024));
+		setNewMode();
+		
 		mars = new Mars(gen, 8);
 		// renderer = new MarsRenderer(context, R.drawable.mars_block_fixed,226);
 		renderer_high = new MarsRenderer(context, R.drawable.mc_fixed_high, 55, 1);
